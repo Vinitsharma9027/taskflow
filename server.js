@@ -28,6 +28,8 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '1.0.0' }
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+const fs = require("fs");
+
 app.get("/reset", (req, res) => {
   fs.writeFileSync("./data/db.json", JSON.stringify({
     users: [],
@@ -35,7 +37,7 @@ app.get("/reset", (req, res) => {
     tasks: []
   }, null, 2));
 
-  res.send("Database reset");
+  res.send("Database reset successful");
 });
 
 app.listen(PORT, () => {
