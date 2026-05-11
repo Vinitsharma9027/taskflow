@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow — Team Task Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-bg">
+    <div class="auth-orb orb1"></div>
+    <div class="auth-orb orb2"></div>
+    <div class="auth-orb orb3"></div>
+  </div>
+  <div class="auth-container">
+    <div class="auth-brand">
+      <div class="brand-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="12" height="12" rx="3" fill="white"/><rect x="16" width="12" height="12" rx="3" fill="white" opacity=".6"/><rect y="16" width="12" height="12" rx="3" fill="white" opacity=".6"/><rect x="16" y="16" width="12" height="12" rx="3" fill="white" opacity=".3"/></svg>
+      </div>
+      <span class="brand-name">TaskFlow</span>
+    </div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Sign In</button>
+        <button class="auth-tab" data-tab="signup">Sign Up</button>
+      </div>
+      <div id="auth-error" class="auth-error hidden"></div>
+      <!-- Login Form -->
+      <div id="login-form" class="auth-form active">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="btn-primary btn-full" id="login-btn">
+          <span>Sign In</span>
+          <div class="btn-loader hidden"></div>
+        </button>
+        <p class="auth-hint">First user to sign up becomes Admin</p>
+      </div>
+      <!-- Signup Form -->
+      <div id="signup-form" class="auth-form">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="signup-name" placeholder="Alex Johnson" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="signup-password" placeholder="Min. 6 characters" autocomplete="new-password">
+        </div>
+        <button class="btn-primary btn-full" id="signup-btn">
+          <span>Create Account</span>
+          <div class="btn-loader hidden"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app-screen" class="screen">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-logo">
+        <div class="brand-icon sm">
+          <svg width="18" height="18" viewBox="0 0 28 28" fill="none"><rect width="12" height="12" rx="3" fill="white"/><rect x="16" width="12" height="12" rx="3" fill="white" opacity=".6"/><rect y="16" width="12" height="12" rx="3" fill="white" opacity=".6"/><rect x="16" y="16" width="12" height="12" rx="3" fill="white" opacity=".3"/></svg>
+        </div>
+        <span>TaskFlow</span>
+      </div>
+      <button class="sidebar-close" id="sidebar-close">✕</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-view="dashboard" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" data-view="projects" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Projects
+      </a>
+      <a class="nav-item" data-view="my-tasks" href="#">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        My Tasks
+      </a>
+    </nav>
+
+    <div class="sidebar-projects" id="sidebar-projects">
+      <div class="sidebar-section-label">
+        Projects
+        <button class="icon-btn-sm" id="new-project-btn" title="New Project">+</button>
+      </div>
+      <div id="sidebar-project-list"></div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-chip" id="user-chip">
+        <div class="avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">User</div>
+          <div class="user-role" id="user-role">member</div>
+        </div>
+        <button class="logout-btn" id="logout-btn" title="Sign out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-area">
+    <header class="topbar">
+      <button class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions" id="topbar-actions"></div>
+    </header>
+
+    <main class="content" id="main-content">
+
+      <!-- DASHBOARD VIEW -->
+      <div id="view-dashboard" class="view active">
+        <div class="page-header">
+          <div>
+            <h1 id="dash-greeting">Good morning 👋</h1>
+            <p class="subtitle">Here's what's happening across your projects</p>
+          </div>
+        </div>
+
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
+            <div><div class="stat-value" id="stat-projects">—</div><div class="stat-label">Projects</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div><div class="stat-value" id="stat-tasks">—</div><div class="stat-label">Total Tasks</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div><div class="stat-value" id="stat-my">—</div><div class="stat-label">Assigned to Me</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div><div class="stat-value" id="stat-overdue">—</div><div class="stat-label">Overdue</div></div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="dash-section">
+            <h2 class="section-title">Status Overview</h2>
+            <div class="status-bars" id="status-bars"></div>
+          </div>
+          <div class="dash-section">
+            <h2 class="section-title">Recent Activity</h2>
+            <div class="recent-list" id="recent-list"></div>
+          </div>
+        </div>
+
+        <div class="dash-section">
+          <h2 class="section-title">Projects Overview</h2>
+          <div class="projects-grid" id="dash-projects-grid"></div>
+        </div>
+      </div>
+
+      <!-- PROJECTS VIEW -->
+      <div id="view-projects" class="view">
+        <div class="page-header">
+          <div>
+            <h1>Projects</h1>
+            <p class="subtitle">Manage your team projects</p>
+          </div>
+          <button class="btn-primary" id="projects-new-btn">+ New Project</button>
+        </div>
+        <div class="projects-grid" id="projects-grid"></div>
+        <div class="empty-state hidden" id="projects-empty">
+          <div class="empty-icon">📁</div>
+          <h3>No projects yet</h3>
+          <p>Create your first project to get started</p>
+          <button class="btn-primary" id="projects-empty-new-btn">+ Create Project</button>
+        </div>
+      </div>
+
+      <!-- PROJECT DETAIL VIEW -->
+      <div id="view-project-detail" class="view">
+        <div class="page-header">
+          <div class="breadcrumb">
+            <a href="#" class="back-link" id="back-to-projects">← Projects</a>
+            <span class="breadcrumb-sep">/</span>
+            <span id="project-detail-name">—</span>
+          </div>
+          <div class="project-actions" id="project-actions"></div>
+        </div>
+
+        <div class="project-tabs">
+          <button class="project-tab active" data-ptab="board">Board</button>
+          <button class="project-tab" data-ptab="list">List</button>
+          <button class="project-tab" data-ptab="members">Members</button>
+        </div>
+
+        <!-- Board Tab -->
+        <div id="ptab-board" class="ptab active">
+          <div class="kanban-board" id="kanban-board">
+            <div class="kanban-col" data-status="todo">
+              <div class="col-header"><span class="col-dot todo"></span>To Do <span class="col-count" id="count-todo">0</span></div>
+              <div class="col-tasks" id="col-todo"></div>
+              <button class="add-task-btn" data-status="todo">+ Add Task</button>
+            </div>
+            <div class="kanban-col" data-status="in_progress">
+              <div class="col-header"><span class="col-dot in_progress"></span>In Progress <span class="col-count" id="count-in_progress">0</span></div>
+              <div class="col-tasks" id="col-in_progress"></div>
+              <button class="add-task-btn" data-status="in_progress">+ Add Task</button>
+            </div>
+            <div class="kanban-col" data-status="in_review">
+              <div class="col-header"><span class="col-dot in_review"></span>In Review <span class="col-count" id="count-in_review">0</span></div>
+              <div class="col-tasks" id="col-in_review"></div>
+              <button class="add-task-btn" data-status="in_review">+ Add Task</button>
+            </div>
+            <div class="kanban-col" data-status="done">
+              <div class="col-header"><span class="col-dot done"></span>Done <span class="col-count" id="count-done">0</span></div>
+              <div class="col-tasks" id="col-done"></div>
+              <button class="add-task-btn" data-status="done">+ Add Task</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- List Tab -->
+        <div id="ptab-list" class="ptab">
+          <div class="list-toolbar">
+            <input type="text" class="search-input" id="task-search" placeholder="Search tasks...">
+            <select class="filter-select" id="filter-status">
+              <option value="">All Status</option>
+              <option value="todo">To Do</option>
+              <option value="in_progress">In Progress</option>
+              <option value="in_review">In Review</option>
+              <option value="done">Done</option>
+            </select>
+            <select class="filter-select" id="filter-priority">
+              <option value="">All Priority</option>
+              <option value="urgent">Urgent</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="task-list-table">
+            <div class="table-header">
+              <span>Task</span><span>Assignee</span><span>Priority</span><span>Status</span><span>Due Date</span><span></span>
+            </div>
+            <div id="task-list-body"></div>
+          </div>
+        </div>
+
+        <!-- Members Tab -->
+        <div id="ptab-members" class="ptab">
+          <div id="members-admin-actions" class="hidden">
+            <div class="add-member-form">
+              <input type="email" id="add-member-email" placeholder="member@example.com">
+              <select id="add-member-role">
+                <option value="member">Member</option>
+                <option value="admin">Admin</option>
+              </select>
+              <button class="btn-primary" id="add-member-btn">Add Member</button>
+            </div>
+          </div>
+          <div class="members-list" id="members-list"></div>
+        </div>
+      </div>
+
+      <!-- MY TASKS VIEW -->
+      <div id="view-my-tasks" class="view">
+        <div class="page-header">
+          <div>
+            <h1>My Tasks</h1>
+            <p class="subtitle">All tasks assigned to you</p>
+          </div>
+        </div>
+        <div class="list-toolbar">
+          <select class="filter-select" id="mytasks-filter-status">
+            <option value="">All Status</option>
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="in_review">In Review</option>
+            <option value="done">Done</option>
+          </select>
+          <select class="filter-select" id="mytasks-filter-priority">
+            <option value="">All Priority</option>
+            <option value="urgent">Urgent</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="task-list-table">
+          <div class="table-header">
+            <span>Task</span><span>Project</span><span>Priority</span><span>Status</span><span>Due Date</span><span></span>
+          </div>
+          <div id="mytasks-list-body"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <!-- Project Modal -->
+  <div id="modal-project" class="modal hidden">
+    <div class="modal-header">
+      <h2 id="project-modal-title">New Project</h2>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Project Name *</label>
+        <input type="text" id="proj-name" placeholder="e.g. Marketing Campaign">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="proj-desc" rows="3" placeholder="What is this project about?"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Color</label>
+        <div class="color-picker" id="proj-color-picker">
+          <div class="color-opt selected" data-color="#6366f1" style="background:#6366f1"></div>
+          <div class="color-opt" data-color="#f43f5e" style="background:#f43f5e"></div>
+          <div class="color-opt" data-color="#10b981" style="background:#10b981"></div>
+          <div class="color-opt" data-color="#f59e0b" style="background:#f59e0b"></div>
+          <div class="color-opt" data-color="#3b82f6" style="background:#3b82f6"></div>
+          <div class="color-opt" data-color="#8b5cf6" style="background:#8b5cf6"></div>
+          <div class="color-opt" data-color="#06b6d4" style="background:#06b6d4"></div>
+          <div class="color-opt" data-color="#ec4899" style="background:#ec4899"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost modal-close">Cancel</button>
+      <button class="btn-primary" id="save-project-btn">Create Project</button>
+    </div>
+  </div>
+
+  <!-- Task Modal -->
+  <div id="modal-task" class="modal hidden">
+    <div class="modal-header">
+      <h2 id="task-modal-title">New Task</h2>
+      <button class="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Task Title *</label>
+        <input type="text" id="task-title" placeholder="What needs to be done?">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="task-desc" rows="3" placeholder="Add details..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Status</label>
+          <select id="task-status">
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="in_review">In Review</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="task-priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Assignee</label>
+          <select id="task-assignee">
+            <option value="">Unassigned</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="date" id="task-due">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost modal-close">Cancel</button>
+      <button class="btn-primary" id="save-task-btn">Create Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hidden"></div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
