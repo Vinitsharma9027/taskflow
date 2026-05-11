@@ -29,6 +29,16 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get("/reset", (req, res) => {
+  fs.writeFileSync("./data/db.json", JSON.stringify({
+    users: [],
+    projects: [],
+    tasks: []
+  }, null, 2));
+
+  res.send("Database reset");
+});
+
 app.listen(PORT, () => {
   console.log(`TaskFlow server running on port ${PORT}`);
 });

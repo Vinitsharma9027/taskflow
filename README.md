@@ -2,37 +2,40 @@
 
 A full-stack web application for creating projects, assigning tasks, and tracking team progress with role-based access control.
 
-![TaskFlow Screenshot](https://via.placeholder.com/800x400/0d0f14/6366f1?text=TaskFlow+Team+Task+Manager)
-
 ---
 
 ## 🌐 Live Demo
-> **[https://your-app.up.railway.app](https://your-app.up.railway.app)**
+
+> **[https://taskflow-production-45fe.up.railway.app]**
 
 ---
 
 ## ✨ Features
 
 ### Authentication
+
 - Secure JWT-based signup/login
 - Password hashing with bcrypt
 - **First user auto-assigned as Global Admin**
 - 7-day session tokens
 
 ### Role-Based Access Control
-| Role | Capabilities |
-|------|-------------|
-| **Global Admin** | Full access to all projects, members, tasks |
-| **Project Admin** | Manage project settings, members, all tasks |
+
+| Role               | Capabilities                                        |
+| ------------------ | --------------------------------------------------- |
+| **Global Admin**   | Full access to all projects, members, tasks         |
+| **Project Admin**  | Manage project settings, members, all tasks         |
 | **Project Member** | View project, create tasks, edit own/assigned tasks |
 
 ### Project Management
+
 - Create, edit, delete projects
 - Color-coded project cards
 - Progress tracking with visual progress bars
 - Overdue task warnings per project
 
 ### Task Management
+
 - **Kanban board** (To Do → In Progress → In Review → Done)
 - **List view** with search, status & priority filters
 - Set priority: Low, Medium, High, Urgent
@@ -41,11 +44,13 @@ A full-stack web application for creating projects, assigning tasks, and trackin
 - Task descriptions
 
 ### Team Management
+
 - Invite members by email
 - Assign/change member roles (Admin/Member)
 - Remove members from projects
 
 ### Dashboard
+
 - At-a-glance stats: projects, total tasks, my tasks, overdue count
 - Status distribution bars
 - Recent activity feed
@@ -55,14 +60,14 @@ A full-stack web application for creating projects, assigning tasks, and trackin
 
 ## 🏗 Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Backend** | Node.js + Express.js |
-| **Database** | JSON file store (zero-dependency, Railway-compatible) |
-| **Auth** | JWT + bcryptjs |
-| **Frontend** | Vanilla JS SPA (no build step) |
-| **Fonts** | Syne + DM Sans (Google Fonts) |
-| **Deployment** | Railway |
+| Layer          | Technology                                            |
+| -------------- | ----------------------------------------------------- |
+| **Backend**    | Node.js + Express.js                                  |
+| **Database**   | JSON file store (zero-dependency, Railway-compatible) |
+| **Auth**       | JWT + bcryptjs                                        |
+| **Frontend**   | Vanilla JS SPA (no build step)                        |
+| **Fonts**      | Syne + DM Sans (Google Fonts)                         |
+| **Deployment** | Railway                                               |
 
 ---
 
@@ -115,6 +120,7 @@ npm start
 ## 🌐 Deploy to Railway
 
 ### Option A: Railway Dashboard (Recommended)
+
 1. Push code to GitHub
 2. Go to [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub**
 3. Select your repo
@@ -123,6 +129,7 @@ npm start
 5. Railway auto-detects Node.js and deploys 🎉
 
 ### Option B: Railway CLI
+
 ```bash
 npm install -g @railway/cli
 railway login
@@ -139,6 +146,7 @@ railway variables set JWT_SECRET=your-secret-here
 ## 📡 REST API Reference
 
 ### Auth
+
 ```
 POST /api/auth/signup    { name, email, password }
 POST /api/auth/login     { email, password }
@@ -147,6 +155,7 @@ GET  /api/auth/users     → all users list
 ```
 
 ### Projects
+
 ```
 GET    /api/projects
 POST   /api/projects           { name, description, color }
@@ -156,6 +165,7 @@ DELETE /api/projects/:id
 ```
 
 ### Project Members
+
 ```
 GET    /api/projects/:id/members
 POST   /api/projects/:id/members    { email, role }
@@ -164,6 +174,7 @@ DELETE /api/projects/:id/members/:userId
 ```
 
 ### Tasks
+
 ```
 GET    /api/projects/:pid/tasks
 POST   /api/projects/:pid/tasks     { title, description, status, priority, assigneeId, dueDate }
@@ -173,6 +184,7 @@ DELETE /api/projects/:pid/tasks/:id
 ```
 
 ### Dashboard
+
 ```
 GET /api/dashboard → { stats, recentTasks, projectsSummary, overdueDetail }
 ```
@@ -189,11 +201,3 @@ GET /api/dashboard → { stats, recentTasks, projectsSummary, overdueDetail }
 - **Viewing projects**: Project members + global admin
 
 ---
-
-## 📹 Demo Video
-> Link: [YouTube / Loom demo](https://your-demo-link.com)
-
----
-
-## 👤 Author
-Built for the Full-Stack Assignment · 2024
