@@ -28,7 +28,6 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '1.0.0' }
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
 app.get("/reset", (req, res) => {
   fs.writeFileSync("./data/db.json", JSON.stringify({
     users: [],
